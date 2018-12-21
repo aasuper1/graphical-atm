@@ -5,14 +5,24 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import controller.ViewManager;
 
 @SuppressWarnings("serial")
 public class CreateView extends JPanel implements ActionListener {
 	
-	private ViewManager manager;		// manages interactions between the views, model, and database
+	private ViewManager manager;			// manages interactions between the views, model, and database
+	private JButton loginButton;			// button that redirects users to the HomeView (if credentials match)
+	private JButton createButton;			// button that directs users to the CreateView
+	private JButton powerButton;			// button that powers off the ATM
+	private JTextField accountField;		// textfield where the user enters his or her account number
+	private JPasswordField pinField;		// textfield where the user enters his or her PIN
+	private JLabel errorMessageLabel;		// label for potential error messages
 	
 	/**
 	 * Constructs an instance (or object) of the CreateView class.
@@ -26,6 +36,9 @@ public class CreateView extends JPanel implements ActionListener {
 		this.manager = manager;
 		initialize();
 	}
+	
+
+	
 	
 	///////////////////// PRIVATE METHODS /////////////////////////////////////////////
 	

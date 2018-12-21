@@ -53,6 +53,7 @@ public class ATM extends JFrame {
 	 */
 	
 	private void initialize() {		
+		
 		JPanel views = new JPanel(new CardLayout());
 		ViewManager manager = new ViewManager(views);
 		
