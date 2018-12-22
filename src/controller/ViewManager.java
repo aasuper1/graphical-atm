@@ -55,6 +55,16 @@ public class ViewManager {
 		}
 	}
 	
+	public void logout() {
+		LoginView lv = ((LoginView) views.getComponents()[ATM.LOGIN_VIEW_INDEX]);
+		
+		try {
+			switchTo(ATM.LOGIN_VIEW);
+		} catch (NumberFormatException e) {
+			lv.updateErrorMessage("Error Cannot Logout");
+		}
+	}
+	
 	/**
 	 * Switches the active (or visible) view upon request.
 	 * 
