@@ -197,7 +197,7 @@ public class CreateView extends JPanel implements ActionListener {
 	}
 	
 	private void initExitButton() {
-		exitButton = new JButton("Login");
+		exitButton = new JButton("Exit");
 		exitButton.setBounds(205, 180, 200, 35);
 		exitButton.addActionListener(this);
 		
@@ -228,7 +228,11 @@ public class CreateView extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
 		
+		if (source.equals(exitButton)) {
+			manager.logout();
+		}
 		// TODO
 		//
 		// this is where you'll setup your action listener, which is responsible for
