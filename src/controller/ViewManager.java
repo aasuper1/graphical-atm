@@ -29,6 +29,9 @@ public class ViewManager {
 		this.db = new Database();
 	}
 	
+	
+	
+	
 	///////////////////// INSTANCE METHODS ////////////////////////////////////////////
 	
 	/**
@@ -37,6 +40,10 @@ public class ViewManager {
 	 * @param accountNumber
 	 * @param pin
 	 */
+	
+	public void insertAccount(BankAccount bankAccount){
+		db.insertAccount(bankAccount);
+	}
 	
 	public void login(String accountNumber, char[] pin) {
 		LoginView lv = ((LoginView) views.getComponents()[ATM.LOGIN_VIEW_INDEX]);

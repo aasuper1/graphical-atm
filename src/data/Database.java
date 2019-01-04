@@ -102,6 +102,7 @@ public class Database {
 		return null;
 	}
 	
+
 	/**
 	 * Inserts an account into the database.
 	 * 
@@ -110,6 +111,24 @@ public class Database {
 	 */
 	
 	public boolean insertAccount(BankAccount account) {
+		
+		try {
+			stmt = conn.createStatement();
+			PreparedStatement selectStmt = conn.prepareStatement("SELECT MAX(account_number) FROM accounts");
+			rs = selectStmt.executeQuery();
+			
+			if (rs.next()) {
+				account.setAccountNumber(rs.getLong(1) + 1);
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		
+		
 		try {
 			stmt = conn.createStatement();
 			

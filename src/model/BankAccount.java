@@ -31,6 +31,12 @@ public class BankAccount {
 		this.user = user;
 	}
 	
+	public BankAccount(char status, double balance, User user) {
+		this.status = status;
+		this.balance = balance;
+		this.user = user;
+	}
+	
 	/**
 	 * Constructs an instance (or object) of the BankAccount class from a ResultSet.
 	 * 
@@ -43,6 +49,8 @@ public class BankAccount {
 	}
 	
 	///////////////////// GETTERS & SETTERS ///////////////////////////////////////////
+	
+	
 	
 	/**
 	 * Retrieves the account status.
@@ -104,6 +112,15 @@ public class BankAccount {
 		this.user = user;
 	}
 	
+	/**
+	 * Sets the account number associated with this account. MUST ONLY BE USED ON CREATION
+	 * 
+	 * @param user
+	 */
+	
+	public void setAccountNumber(long _accountNumber) {
+		accountNumber = _accountNumber;
+	}
 	///////////////////// INSTANCE METHODS ////////////////////////////////////////////
 	
 	/**
