@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -291,6 +292,9 @@ public class CreateView extends JPanel implements ActionListener {
 		this.add(exitButton);
 	}
 	
+	private void validateInputs() {
+		// TODO
+	}
 	
 	
 	
@@ -322,9 +326,9 @@ public class CreateView extends JPanel implements ActionListener {
 		}
 		
 		if (source.equals(createAccountButton)) {
+			validateInputs();
 			User user = new User(Integer.parseInt(pinField.getText()), (int)dayField.getSelectedItem() + (int)monthField.getSelectedItem() * 100 + (int)yearField.getSelectedItem() * 10000, (long)Integer.parseInt(phoneNumberField.getText()), firstNameField.getText(), lastNameField.getText(), addressField.getText(),cityField.getText(), stateField.getSelectedItem().toString(), postalField.getText());
 			manager.insertAccount(new BankAccount('Y', 0, user));
-			manager.switchTo(ATM.HOME_VIEW);
 		}
 		// TODO
 		//

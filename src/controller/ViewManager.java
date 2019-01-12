@@ -9,6 +9,7 @@ import data.Database;
 import model.BankAccount;
 import view.ATM;
 import view.LoginView;
+import view.HomeView;
 
 public class ViewManager {
 	
@@ -43,6 +44,8 @@ public class ViewManager {
 	
 	public void insertAccount(BankAccount bankAccount){
 		db.insertAccount(bankAccount);
+		JOptionPane.showMessageDialog(null, "Your Bank Account Number is: " + bankAccount.getAccountNumber());
+		switchTo(ATM.HOME_VIEW);
 	}
 	
 	public void login(String accountNumber, char[] pin) {
@@ -54,6 +57,7 @@ public class ViewManager {
 			if (account == null) {
 				lv.updateErrorMessage("Invalid account number and/or PIN.");
 			} else {
+				((HomeView)views.getComponent(2)).initAccount(account);
 				switchTo(ATM.HOME_VIEW);
 				lv.clear();
 			}
