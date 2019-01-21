@@ -161,9 +161,12 @@ public class User {
 	 * @param pin
 	 */
 	
-	public void setPin(int current, int pin) {
+	public boolean setPin(int current, int pin) {
 		if (isValidPin(pin, current)) {
 			this.pin = pin;
+			return true;
+		}else{
+			return false;
 		}
 	}
 		

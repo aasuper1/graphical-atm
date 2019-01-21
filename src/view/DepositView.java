@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -21,6 +22,7 @@ public class DepositView  extends JPanel implements ActionListener{
 	private JButton exitButton;
 	private JTextField depositAmountField;
 	private JButton depositButton;
+	private JLabel errorMessageLabel;
 	
 
 	public DepositView(ViewManager manager) {
@@ -56,7 +58,7 @@ public class DepositView  extends JPanel implements ActionListener{
 	
 	private void initDepositAmount() {
 		JLabel label = new JLabel("Deposit Value", SwingConstants.RIGHT);
-		label.setBounds(100, 180-20, 95, 35);
+		label.setBounds(50, 180-20, 145, 35);
 		label.setLabelFor(depositAmountField);
 		label.setFont(new Font("DialogInput", Font.BOLD, 14));
 		
@@ -75,6 +77,22 @@ public class DepositView  extends JPanel implements ActionListener{
 		this.add(depositButton);
 	}
 	
+	public void reset(){
+		depositAmountField.setText("");
+	}
+	
+	private boolean validateDeposit(String deposit){
+		try {
+			if (Double.parseDouble(deposit) >= 0){
+				return true;
+			}else{
+				return false;
+			}
+		}catch (Exception e){
+			return false;
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -82,6 +100,23 @@ public class DepositView  extends JPanel implements ActionListener{
 		
 		if (source.equals(exitButton)) {
 			manager.switchTo(ATM.HOME_VIEW);
+		}
+		
+		if (source.equals(depositButton)){
+			if (validateDeposit(depositAmountField.getText())){
+				manager.deposit(Double.parseDouble(depositAmountField.getText()));
+				manager.switchTo(ATM.HOME_VIEW);
+			}else{
+				try {			
+					JOptionPane.showMessageDialog(
+						manager.getViews(),
+						"Invalid Depoist",
+						"Error Try Again",
+						JOptionPane.ERROR_MESSAGE);
+				} catch (Exception _e) {
+					_e.printStackTrace();
+				}
+			}
 		}
 		// TODO Fill in the rest of the possible functions
 		

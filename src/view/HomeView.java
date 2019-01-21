@@ -24,6 +24,8 @@ public class HomeView extends JPanel implements ActionListener {
 	private JButton depositButton;
 	private JButton withdrawButton;
 	private JButton transferButton;
+	private JButton personalInformationButton;
+	private JButton closeAccountButton;
 	
 	/**
 	 * Constructs an instance (or objects) of the HomeView class.
@@ -51,12 +53,14 @@ public class HomeView extends JPanel implements ActionListener {
 		// this is a placeholder for this view and should be removed once you start
 		// building the HomeView.
 		
-		this.add(new javax.swing.JLabel("HomeView", javax.swing.SwingConstants.CENTER));
 		initAccountDetials();
 		initLogoutButton();
 		initDepositButton();
 		initWithdrawButton();
 		initTransferButton();
+		initPersonalInformationButton();
+		initCloseAccountButton();
+		
 		
 		
 		// TODO
@@ -91,9 +95,9 @@ public class HomeView extends JPanel implements ActionListener {
 	 * @throws IOException
 	 */
 	
-	public void initAccount(BankAccount account) {
-		nameDisplay.setText("Welcome: " + account.getUser().getFirstName() + " " + account.getUser().getLastName());
-		accountNumberDisplay.setText("Account Number: " + account.getAccountNumber());
+	public void reset(BankAccount account) {
+		nameDisplay.setText("Welcome: " + account.getUser().getFirstName() + " " + account.getUser().getLastName() + ";");
+		accountNumberDisplay.setText("Account Number: " + account.getAccountNumber() + ";");
 		balanceDisplay.setText("Balance: " + account.getBalance());
 	}
 	
@@ -120,7 +124,21 @@ public class HomeView extends JPanel implements ActionListener {
 		
 		this.add(transferButton);
 	}
+	private void initPersonalInformationButton() {
+		personalInformationButton = new JButton("View/Edit Personal Information");
+		personalInformationButton.setBounds(205, 320-20, 300, 35);
+		personalInformationButton.addActionListener(this);
+		
+		this.add(personalInformationButton);
+	}
 	
+	private void initCloseAccountButton() {
+		closeAccountButton = new JButton("Close Account");
+		closeAccountButton.setBounds(205, 320-20, 200, 35);
+		closeAccountButton.addActionListener(this);
+		
+		this.add(closeAccountButton);
+	}
 	
 	private void writeObject(ObjectOutputStream oos) throws IOException {
 		throw new IOException("ERROR: The HomeView class is not serializable.");
@@ -149,6 +167,12 @@ public class HomeView extends JPanel implements ActionListener {
 		}
 		if (source.equals(transferButton)){
 			manager.switchTo(ATM.TRANSFER_VIEW);
+		}
+		if (source.equals(personalInformationButton)){
+			manager.switchTo(ATM.INFORMATION_VIEW);
+		}
+		if (source.equals(closeAccountButton)){
+			manager.closeAccount();
 		}
 		
 		// TODO

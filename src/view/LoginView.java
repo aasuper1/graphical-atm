@@ -207,6 +207,11 @@ public class LoginView extends JPanel implements ActionListener {
 	private void writeObject(ObjectOutputStream oos) throws IOException {
 		throw new IOException("ERROR: The LoginView class is not serializable.");
 	}
+	
+	public void reset(){
+		accountField.setText("");
+		pinField.setText("");
+	}
 
 	///////////////////// OVERRIDDEN METHODS //////////////////////////////////////////
 	

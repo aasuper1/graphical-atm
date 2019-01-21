@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -55,8 +56,8 @@ public class WithdrawView  extends JPanel implements ActionListener{
 	}
 	
 	private void initWithdrawAmount() {
-		JLabel label = new JLabel("Withdraw Amount.", SwingConstants.RIGHT);
-		label.setBounds(100, 180-20, 95, 35);
+		JLabel label = new JLabel("Withdraw Amount", SwingConstants.RIGHT);
+		label.setBounds(50, 180-20, 145, 35);
 		label.setLabelFor(withdrawAmountField);
 		label.setFont(new Font("DialogInput", Font.BOLD, 14));
 		
@@ -75,6 +76,22 @@ public class WithdrawView  extends JPanel implements ActionListener{
 		this.add(withdrawButton);
 	}
 	
+	public void reset(){
+		withdrawAmountField.setText("");
+	}
+	
+	private boolean validateWithdraw(String withdraw){
+		try {
+			if (Double.parseDouble(withdraw) >= 0 && Double.parseDouble(withdraw) <= manager.getAccount().getBalance()){
+				return true;
+			}else{
+				return false;
+			}
+		}catch (Exception e){
+			return false;
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -82,6 +99,23 @@ public class WithdrawView  extends JPanel implements ActionListener{
 		
 		if (source.equals(exitButton)) {
 			manager.switchTo(ATM.HOME_VIEW);
+		}
+		
+		if (source.equals(withdrawButton)){
+			if (validateWithdraw(withdrawAmountField.getText())){
+				manager.withdraw(Double.parseDouble(withdrawAmountField.getText()));
+				manager.switchTo(ATM.HOME_VIEW);
+			}else{
+				try {			
+					JOptionPane.showMessageDialog(
+						manager.getViews(),
+						"Invalid Withdrawal",
+						"Error Try Again",
+						JOptionPane.ERROR_MESSAGE);
+				} catch (Exception _e) {
+					_e.printStackTrace();
+				}
+			}
 		}
 		// TODO Fill in the rest of the possible functions
 		

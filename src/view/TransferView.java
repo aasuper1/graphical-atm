@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -58,7 +59,7 @@ public class TransferView  extends JPanel implements ActionListener{
 	
 	private void initTransferAmount() {
 		JLabel label = new JLabel("Transfer Amount", SwingConstants.RIGHT);
-		label.setBounds(100, 180-20, 95, 35);
+		label.setBounds(50, 180-20, 145, 35);
 		label.setLabelFor(transferAmountField);
 		label.setFont(new Font("DialogInput", Font.BOLD, 14));
 		
@@ -71,7 +72,7 @@ public class TransferView  extends JPanel implements ActionListener{
 	
 	private void initTargetAccountField() {
 		JLabel label = new JLabel("Target Account Number", SwingConstants.RIGHT);
-		label.setBounds(100, 220-20, 95, 35);
+		label.setBounds(25, 220-20, 170, 35);
 		label.setLabelFor(targetAccountField);
 		label.setFont(new Font("DialogInput", Font.BOLD, 14));
 		
@@ -90,6 +91,31 @@ public class TransferView  extends JPanel implements ActionListener{
 		this.add(transferButton);
 	}
 	
+	public void reset(){
+		transferAmountField.setText("");
+		targetAccountField.setText("");
+	}
+	
+	public boolean validateTarget(){
+		if (manager.getAccount(Long.parseLong(targetAccountField.getText())) != null){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean validateTransferAmount(String transfer){
+		try {
+			if (Double.parseDouble(transfer) >= 0 && Double.parseDouble(transfer) <= manager.getAccount().getBalance()){
+				return true;
+			}else{
+				return false;
+			}
+		}catch (Exception e){
+			return false;
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -97,6 +123,43 @@ public class TransferView  extends JPanel implements ActionListener{
 		
 		if (source.equals(exitButton)) {
 			manager.switchTo(ATM.HOME_VIEW);
+		}
+		
+		if (source.equals(transferButton)){
+			boolean success = true;
+			if (validateTarget()){
+			}else{
+				try {			
+					JOptionPane.showMessageDialog(
+						manager.getViews(),
+						"Invalid Target Account",
+						"Error Try Again",
+						JOptionPane.ERROR_MESSAGE);
+				} catch (Exception _e) {
+					_e.printStackTrace();
+				}
+				success = false;
+			}
+			if (validateTransferAmount(transferAmountField.getText())){
+			}else{
+				try {			
+					JOptionPane.showMessageDialog(
+						manager.getViews(),
+						"Invalid Transfer Amount",
+						"Error Try Again",
+						JOptionPane.ERROR_MESSAGE);
+				} catch (Exception _e) {
+					_e.printStackTrace();
+				}
+				success = false;
+			}
+			
+			if (success){
+				BankAccount target = manager.getAccount(Long.parseLong(targetAccountField.getText()));
+				manager.transferFunds(target, Double.parseDouble(transferAmountField.getText()));
+				manager.switchTo(ATM.HOME_VIEW);
+			}
+			
 		}
 		// TODO Fill in the rest of the possible functions
 		

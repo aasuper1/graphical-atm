@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import javax.swing.JButton;
@@ -21,9 +22,10 @@ import model.User;
 import model.BankAccount;
 
 @SuppressWarnings("serial")
-public class CreateView extends JPanel implements ActionListener {
+public class InformationView extends JPanel implements ActionListener {
 	
 	private ViewManager manager;			// manages interactions between the views, model, and database
+	private JTextField accountNumberField;
 	private JTextField firstNameField;
 	private JTextField lastNameField;
 	private JComboBox<Integer> monthField;
@@ -37,17 +39,20 @@ public class CreateView extends JPanel implements ActionListener {
 	private JComboBox<String> stateField;
 	private JTextField postalField;
 	private JTextField pinField;
-	private JButton createAccountButton;
+	private JButton editInformationButton;
+	private JButton cancelButton;
 	private JButton exitButton;
+	private JButton saveButton;
+	private JButton passwordButton;
 
 	
 	/**
-	 * Constructs an instance (or object) of the CreateView class.
+	 * Constructs an instance (or object) of the InformationView class.
 	 * 
 	 * @param manager
 	 */
 	
-	public CreateView(ViewManager manager) {
+	public InformationView(ViewManager manager) {
 		super();
 		
 		this.manager = manager;
@@ -60,7 +65,7 @@ public class CreateView extends JPanel implements ActionListener {
 	///////////////////// PRIVATE METHODS /////////////////////////////////////////////
 	
 	/*
-	 * Initializes the CreateView components.
+	 * Initializes the InformationView components.
 	 */
 	
 	private void initialize() {
@@ -68,11 +73,11 @@ public class CreateView extends JPanel implements ActionListener {
 		// TODO
 		//
 		// this is a placeholder for this view and should be removed once you start
-		// building the CreateView.
+		// building the InformationView.
 		
 		this.setLayout(null);// What is this
-		this.add(new javax.swing.JLabel("CreateView", javax.swing.SwingConstants.CENTER));
-		
+		this.add(new javax.swing.JLabel("InformationView", javax.swing.SwingConstants.CENTER));
+		initAccountNumberField();
 		initFirstNameField();
 		initLastNameField();
 		initDateOfBirth();
@@ -82,16 +87,34 @@ public class CreateView extends JPanel implements ActionListener {
 		initStateField();
 		initPostalField();
 		initPinField();
-		initCreateAccountButton();
+		initEditInformationButton();
 		initExitButton();
+		initCancelButton();
+		initSaveButton();
+		initPasswordButton();
 		
 		// TODO
 		//
-		// this is where you should build the CreateView (i.e., all the components that
-		// allow the user to enter his or her information and create a new account).
+		// this is where you should build the InformationView (i.e., all the components that
+		// allow the user to enter his or her information and information a new account).
 		//
 		// feel free to use my layout in LoginView as an example for laying out and
 		// positioning your components.
+	}
+	
+	private void initAccountNumberField() {
+		JLabel label = new JLabel("Account Number", SwingConstants.RIGHT);
+		label.setBounds(75, 0, 120, 35);
+		label.setLabelFor(accountNumberField);
+		label.setFont(new Font("DialogInput", Font.BOLD, 14));
+		
+		accountNumberField = new JTextField(20);
+		accountNumberField.setBounds(205, 0, 200, 35);
+		
+		accountNumberField.setEnabled(false);
+		this.add(label);
+		this.add(accountNumberField);
+		
 	}
 	
 	private void initFirstNameField() {
@@ -103,8 +126,10 @@ public class CreateView extends JPanel implements ActionListener {
 		firstNameField = new JTextField(20);
 		firstNameField.setBounds(205, 40, 200, 35);
 		
+		firstNameField.setEnabled(false);
 		this.add(label);
 		this.add(firstNameField);
+		
 	}
 	
 	private void initLastNameField() {
@@ -116,6 +141,7 @@ public class CreateView extends JPanel implements ActionListener {
 		lastNameField = new JTextField(20);
 		lastNameField.setBounds(205, 80, 200, 35);
 		
+		lastNameField.setEnabled(false);
 		this.add(label);
 		this.add(lastNameField);
 	}
@@ -287,20 +313,42 @@ public class CreateView extends JPanel implements ActionListener {
 		this.add(pinField);
 	}
 	
-	private void initCreateAccountButton() {
-		createAccountButton = new JButton("Create Account");
-		createAccountButton.setBounds(205, 420-20, 200, 35);
-		createAccountButton.addActionListener(this);
+	private void initEditInformationButton() {
+		editInformationButton = new JButton("Edit");
+		editInformationButton.setBounds(205, 420-20, 200, 35);
+		editInformationButton.addActionListener(this);
 		
-		this.add(createAccountButton);
+		this.add(editInformationButton);
 	}
 	
 	private void initExitButton() {
 		exitButton = new JButton("Exit");
-		exitButton.setBounds(205, 460-20, 200, 35);
+		exitButton.setBounds(50, 420-20, 100, 35);
 		exitButton.addActionListener(this);
 		
 		this.add(exitButton);
+	}
+	
+	private void initSaveButton() {
+		saveButton = new JButton("Save");
+		saveButton.setBounds(205, 420-20, 200, 35);
+		saveButton.addActionListener(this);
+		
+		this.add(saveButton);
+	}
+	
+	private void initCancelButton() {
+		cancelButton = new JButton("Cancel");
+		cancelButton.setBounds(50, 460-20, 100, 35);
+		cancelButton.addActionListener(this);
+		this.add(cancelButton);
+	}
+	
+	private void initPasswordButton(){
+		passwordButton = new JButton("Change Password");
+		passwordButton.setBounds(205, 460-20, 200, 35);
+		passwordButton.addActionListener(this);
+		this.add(passwordButton);
 	}
 	
 	private int[] validateInputs() {
@@ -341,37 +389,84 @@ public class CreateView extends JPanel implements ActionListener {
 		return errors;
 	}
 	
-	public void reset() {
-		firstNameField.setText("");
-		lastNameField.setText("");
-		monthField.setSelectedItem(1);
-		dayField.setSelectedItem(1);
-		yearField.setSelectedItem(1990);
-		phoneNumberField1.setText("");
-		phoneNumberField2.setText("");
-		phoneNumberField3.setText("");
-		addressField.setText("");
-		cityField.setText("");
-		stateField.setSelectedItem("AK");
-		postalField.setText("");
-		pinField.setText("");
+	private boolean validatePin(String pin){
+		try {
+			if (Integer.parseInt(pin) >= 0 && Integer.parseInt(pin) <= 9999 && pin.length() == 4){
+				return true;
+			}else{
+				return false;
+			}
+		}catch (Exception e){
+			return false;
+		}
 	}
 	
+	public void reset(BankAccount account) {
+		accountNumberField.setText(Long.toString(account.getAccountNumber()));
+		accountNumberField.setEnabled(false);
+		firstNameField.setText(account.getUser().getFirstName());
+		firstNameField.setEnabled(false);
+		lastNameField.setText(account.getUser().getLastName());
+		lastNameField.setEnabled(false);
+		monthField.setSelectedItem((account.getUser().getDob()%10000)/100);
+		monthField.setEnabled(false);
+		dayField.setSelectedItem(account.getUser().getDob()%100);
+		dayField.setEnabled(false);
+		yearField.setSelectedItem(account.getUser().getDob()/10000);
+		yearField.setEnabled(false);
+		phoneNumberField1.setText(Long.toString(account.getUser().getPhone()).substring(0, 3));
+		phoneNumberField1.setEnabled(false);
+		phoneNumberField2.setText(Long.toString(account.getUser().getPhone()).substring(3, 6));
+		phoneNumberField2.setEnabled(false);
+		phoneNumberField3.setText(Long.toString(account.getUser().getPhone()).substring(6, 10));
+		phoneNumberField3.setEnabled(false);
+		addressField.setText(account.getUser().getStreetAddress());
+		addressField.setEnabled(false);
+		cityField.setText(account.getUser().getCity());
+		cityField.setEnabled(false);
+		stateField.setSelectedItem(account.getUser().getState());
+		stateField.setEnabled(false);
+		postalField.setText(account.getUser().getZip());
+		postalField.setEnabled(false);
+		pinField.setText(Integer.toString(account.getUser().getPin()));
+		pinField.setEnabled(false);
+		cancelButton.setEnabled(false);
+		editInformationButton.setVisible(true);
+		saveButton.setVisible(false);
+		passwordButton.setEnabled(false);
+		
+	}
+	
+	private void setEditMode(){
+		phoneNumberField1.setEnabled(true);
+		phoneNumberField2.setEnabled(true);
+		phoneNumberField3.setEnabled(true);
+		addressField.setEnabled(true);
+		cityField.setEnabled(true);
+		stateField.setEnabled(true);
+		postalField.setEnabled(true);
+		cancelButton.setEnabled(true);
+		editInformationButton.setVisible(false);;
+		saveButton.setVisible(true);
+		passwordButton.setEnabled(true);
+	}
+	
+	
 	/*
-	 * CreateView is not designed to be serialized, and attempts to serialize will throw an IOException.
+	 * InformationView is not designed to be serialized, and attempts to serialize will throw an IOException.
 	 * 
 	 * @param oos
 	 * @throws IOException
 	 */
 	
 	private void writeObject(ObjectOutputStream oos) throws IOException {
-		throw new IOException("ERROR: The CreateView class is not serializable.");
+		throw new IOException("ERROR: The InformationView class is not serializable.");
 	}
 	
 	///////////////////// OVERRIDDEN METHODS //////////////////////////////////////////
 	
 	/*
-	 * Responds to button clicks and other actions performed in the CreateView.
+	 * Responds to button clicks and other actions performed in the InformationView.
 	 * 
 	 * @param e
 	 */
@@ -381,14 +476,23 @@ public class CreateView extends JPanel implements ActionListener {
 		Object source = e.getSource();
 		
 		if (source.equals(exitButton)) {
-			manager.logout();
+			manager.switchTo(ATM.HOME_VIEW);;
+		}
+		if (source.equals(editInformationButton)){
+			if (editInformationButton.getText().equals("Edit")){
+				setEditMode();
+				
+			}
 		}
 		
-		if (source.equals(createAccountButton)) {
+		
+		if (source.equals(saveButton)){
 			int[] valid = validateInputs();
 			if (valid[0] == 0 && valid[1] == 0 && valid[2] == 0 && valid[3] == 0){
-				User user = new User(Integer.parseInt(pinField.getText()), (int)dayField.getSelectedItem() + (int)monthField.getSelectedItem() * 100 + (int)yearField.getSelectedItem() * 10000, Long.parseLong((phoneNumberField1.getText() + phoneNumberField2.getText() + phoneNumberField3.getText())), firstNameField.getText(), lastNameField.getText(), addressField.getText(),cityField.getText(), stateField.getSelectedItem().toString(), postalField.getText());
-				manager.insertAccount(new BankAccount('Y', 0, user));
+				manager.updateAccountInfo(cityField.getText(), (String) stateField.getSelectedItem(), addressField.getText(), postalField.getText(), Long.parseLong((phoneNumberField1.getText() + phoneNumberField2.getText() + phoneNumberField3.getText())));
+				reset(manager.getAccount(Long.parseLong(accountNumberField.getText())));
+				editInformationButton.setVisible(true);
+				saveButton.setVisible(false);
 			}else{
 				try {			
 					JOptionPane.showMessageDialog(
@@ -401,6 +505,75 @@ public class CreateView extends JPanel implements ActionListener {
 				}
 			}
 		}
+		if (source.equals(cancelButton)){
+			BankAccount account = manager.getAccount();
+			editInformationButton.setVisible(true);
+			saveButton.setVisible(false);
+			reset(account);
+		}
+		
+		if (source.equals(passwordButton)){
+			BankAccount account = manager.getAccount();
+			String current = "";
+			String newPin = "";
+			try {			
+				current = JOptionPane.showInputDialog(
+					manager.getViews(),
+					"Enter Old Pin",
+					"0000");
+			} catch (Exception _e) {
+				_e.printStackTrace();
+			}
+			try {			
+				newPin = JOptionPane.showInputDialog(
+					manager.getViews(),
+					"Enter New Pin",
+					"0000");
+			} catch (Exception _e) {
+				_e.printStackTrace();
+			}
+			if (validatePin(current) && validatePin(newPin)){
+				try {			
+					int choice = JOptionPane.showConfirmDialog(
+						manager.getViews(),
+						"Are you sure, this will be permanent?",
+						"Change Password",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE
+					);
+					
+					if (choice == 0) {
+						if (manager.updatePin(Integer.parseInt(current), Integer.parseInt(newPin))){
+							manager.updateAccount(manager.getAccount());
+						}else{
+							try {			
+								JOptionPane.showMessageDialog(
+									manager.getViews(),
+									"Incorrect Pin",
+									"Error Try Again",
+									JOptionPane.ERROR_MESSAGE);
+							} catch (Exception _e) {
+								_e.printStackTrace();
+							}
+						}
+					}
+				} catch (Exception _e) {
+					_e.printStackTrace();
+				}
+			}else{
+				try {			
+					JOptionPane.showMessageDialog(
+						manager.getViews(),
+						"Invalid Pin(s)",
+						"Error Try Again",
+						JOptionPane.ERROR_MESSAGE);
+				} catch (Exception _e) {
+					_e.printStackTrace();
+				}
+			}
+			
+		}
+		
 		// TODO
 		//
 		// this is where you'll setup your action listener, which is responsible for
