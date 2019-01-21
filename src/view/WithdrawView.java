@@ -82,7 +82,7 @@ public class WithdrawView  extends JPanel implements ActionListener{
 	
 	private boolean validateWithdraw(String withdraw){
 		try {
-			if (Double.parseDouble(withdraw) >= 0 && Double.parseDouble(withdraw) <= manager.getAccount().getBalance()){
+			if (Double.parseDouble(withdraw) >= 0.01 && Double.parseDouble(withdraw) <= manager.getAccount().getBalance()){
 				return true;
 			}else{
 				return false;

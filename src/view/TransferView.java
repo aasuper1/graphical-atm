@@ -106,7 +106,7 @@ public class TransferView  extends JPanel implements ActionListener{
 	
 	public boolean validateTransferAmount(String transfer){
 		try {
-			if (Double.parseDouble(transfer) >= 0 && Double.parseDouble(transfer) <= manager.getAccount().getBalance()){
+			if (Double.parseDouble(transfer) >= 0.01 && Double.parseDouble(transfer) <= manager.getAccount().getBalance()){
 				return true;
 			}else{
 				return false;

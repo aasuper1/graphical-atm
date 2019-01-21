@@ -83,7 +83,7 @@ public class DepositView  extends JPanel implements ActionListener{
 	
 	private boolean validateDeposit(String deposit){
 		try {
-			if (Double.parseDouble(deposit) >= 0){
+			if (Double.parseDouble(deposit) >= 0.01){
 				return true;
 			}else{
 				return false;

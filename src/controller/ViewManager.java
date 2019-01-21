@@ -147,11 +147,20 @@ public class ViewManager {
 	
 	public void logout() {
 		LoginView lv = ((LoginView) getViews().getComponents()[ATM.LOGIN_VIEW_INDEX]);
-		
-		try {
-			switchTo(ATM.LOGIN_VIEW);
-			account = null;
-		} catch (NumberFormatException e) {
+		try {			
+			int choice = JOptionPane.showConfirmDialog(
+				getViews(),
+				"Are you sure?",
+				"Logout",
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE
+			);
+			
+			if (choice == 0) {
+				switchTo(ATM.LOGIN_VIEW);
+				account = null;
+			}
+		} catch (Exception e) {
 			lv.updateErrorMessage("Error Cannot Logout");
 		}
 	}

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -77,7 +78,7 @@ public class HomeView extends JPanel implements ActionListener {
 		this.add(nameDisplay);
 		accountNumberDisplay = new JLabel("Account Number: ", SwingConstants.RIGHT);
 		this.add(accountNumberDisplay);
-		balanceDisplay = new JLabel("Balance: ", SwingConstants.RIGHT);
+		balanceDisplay = new JLabel("Balance: $", SwingConstants.RIGHT);
 		this.add(balanceDisplay);
 	}
 	
@@ -98,7 +99,8 @@ public class HomeView extends JPanel implements ActionListener {
 	public void reset(BankAccount account) {
 		nameDisplay.setText("Welcome: " + account.getUser().getFirstName() + " " + account.getUser().getLastName() + ";");
 		accountNumberDisplay.setText("Account Number: " + account.getAccountNumber() + ";");
-		balanceDisplay.setText("Balance: " + account.getBalance());
+		DecimalFormat df2 = new DecimalFormat( "#,###,###,##0.00" );
+		balanceDisplay.setText("Balance: $" + df2.format(account.getBalance()));
 	}
 	
 	private void initDepositButton() {
